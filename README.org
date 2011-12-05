@@ -3,9 +3,9 @@ Prowl is the Growl client for iOS. Push to your iPhone, iPod touch, or iPad noti
 Visit [[http://prowlapp.com][Prowl app]] for more information.
 
 ** Requirements
-1. 1. An iPhone/iPad/iPod with the Prowl App installed.
-1. 2. Your api key from prowlapp.com
-1. 3. Love of FuelPhp framework
+1. An iPhone/iPad/iPod with the Prowl App installed.
+1. Your api key from prowlapp.com
+1. Love of FuelPhp framework
 
 ** Installation
 Standard FuelPHP package installation: download the package and copy it to your fuelPHP packages folder: new_web_site/fuel/packages/ Open your config file (new_web_site/fuel/app/config/config.php) and look around line 187 and add 'Prowl' to the packages array. 
