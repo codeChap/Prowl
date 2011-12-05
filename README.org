@@ -1,0 +1,56 @@
+* What is Prowl?
+Prowl is the Growl client for iOS. Push to your iPhone, iPod touch, or iPad notifications from a Mac or Windows computer, or from a multitude of apps and services. Easily integrate the Prowl API into your applications.
+Visit [[http://prowlapp.com][Prowl app]] for more information.
+
+** Requirements
+1. 1. An iPhone/iPad/iPod with the Prowl App installed.
+1. 2. Your api key from prowlapp.com
+1. 3. Love of FuelPhp framework
+
+** Installation
+Standard FuelPHP package installation: download the package and copy it to your fuelPHP packages folder: new_web_site/fuel/packages/ Open your config file (new_web_site/fuel/app/config/config.php) and look around line 187 and add 'Prowl' to the packages array. 
+
+** Usage
+Add one of the following blocks of code to a controller file:
+eg: new_web_site_/fuel/app/classes/controller/welcome.php
+
+#+BEGIN_EXAMPLE
+public function action_prowl()
+{
+  $prowl = Prowl::forge();
+  $prowl->set_application('Name');
+  $prowl->set_subject('Subject');
+  $prowl->set_message('Prowl is cool');
+  $prowl->add_key('y0urpr0wl4p1k3y');
+  $prowl->send();
+}
+#+END_EXAMPLE
+
+or
+
+#+BEGIN_EXAMPLE
+public function action_prowl()
+{
+  $config = array(
+    'application' => 'ZebraCMS',
+    'subject' => $subject,
+    'message' => $message,
+    'key' => $key
+   );
+
+  Prowl::forge($config)->send();
+}
+#+END_EXAMPLE
+
+Then visit the url: http://localhost/new_web_site/public/index.php/welcome/prowl
+
+** Configuration
+The package will accept the following in its config array:
+#+BEGIN_EXAMPLE
+$key = string/array : required
+$application = string : required
+$subject = string : required
+$message = string : required
+$action = valid url string
+$priority = string (-2,-1,0,1,2)
+#+END_EXAMPLE
