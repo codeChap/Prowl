@@ -32,10 +32,10 @@ or
 public function action_prowl()
 {
   $config = array(
-    'application' => 'ZebraCMS',
-    'subject' => $subject,
-    'message' => $message,
-    'key' => $key
+    'application' => 'Name',
+    'subject' => 'Subject',
+    'message' => 'Prowl is cool',
+    'key' => 'y0urpr0wl4p1k3y'
    );
 
   Prowl::forge($config)->send();
