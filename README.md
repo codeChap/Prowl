@@ -1,4 +1,4 @@
 Prowl-PSR
 =========
 
-Independent Prowl package
+Independent PHP Prowl package
