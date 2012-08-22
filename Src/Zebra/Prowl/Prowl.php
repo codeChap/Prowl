@@ -8,7 +8,7 @@
  * @copyright  2011 - 2012 Derrick Egersdorfer
  */
 
-namespace Egers/Prowl;
+namespace Zebra/Prowl;
 
 class Prowl
 {
