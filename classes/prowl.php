@@ -1,13 +1,9 @@
 <?php
 /**
- * Fuel is a fast, lightweight, community driven PHP5 framework.
+ * Fuel Prowl Package
  *
- * @package    Fuel
- * @version    1.0
- * @author     Fuel Development Team
+ * @copyright  2012 Derrick Egersdorfer
  * @license    MIT License
- * @copyright  2010 - 2011 Fuel Development Team
- * @link       http://fuelphp.com
  */
 
 namespace Prowl;
@@ -17,56 +13,92 @@ class DidNotAuthorize extends \FuelException {}
 class OverLimit extends \FuelException {}
 class NotApproved extends \FuelException {}
 class InternalError extends \FuelException {}
+class ConfigError extends \FuelException {}
 
-/**
- * Prowl
- *
- * @package     Fuel
- * @subpackage  Prowl
- */
 class Prowl {
 
-	static $key = false;
-	static $application = false;
-	static $priority = 0;
-	static $subject = false;
-	static $message = false;
-	static $action = false;
+	private static $key = false;
+	private static $application = false;
+	private static $priority = 0;
+	private static $subject = false;
+	private static $message = false;
+	private static $action = false;
+	private static $url = false;
+	private static $error = false;
 
-	static $url = "https://api.prowlapp.com/publicapi/add";
-	static $error = false;
-
-	public static function forge(array $options=array())
+	/**
+	 * Sets initial configuration and credentials to talk to prowl server.
+	 */
+	private static function configuration($options=array())
 	{
-		// Setup config
-		if(is_array($options)){
+		// Merge with config
+		$config = \Arr::merge( $options, \Config::get('prowl') );
+
+		// Setup credentials
+		if(is_array($config)){
 			$class_variables = get_class_vars("Prowl");
-			foreach($options as $k => $v){
+			foreach($config as $k => $v){
 				if(array_key_exists($k, $class_variables)){
 					self::${$k} = $v;
 				}
 			}
 		}
-		return new \Prowl($options);
+		else{
+			throw new ConfigError($error);
+		}
 	}
 
-	public static function set_application($application)
+	/**
+	 * Init, config loading.
+	 */
+	public static function _init()
+	{
+		\Config::load('prowl', true);
+
+		// Set up configuration
+		$configuration = self::configuration();
+	}
+
+	/**
+	 * Forge new Prowl instance
+	 */
+	public static function forge(array $config=array())
+	{
+		// Set up configuration
+		if( ! self::$key){
+			$configuration = self::configuration($config);
+		}
+
+		// Done
+		return new \Prowl($configuration);
+	}
+
+	/**
+	 * Sets the application name.
+	 */
+	public static function application($application)
 	{
 		self::$application=utf8_encode($application);
 	}
-	
-	public static function set_priority($priority)
+
+	/**
+	 * Sets the priority.
+	 */
+	public static function priority($priority)
 	{
 		$options = array("-2", "-1", "0", "1", "2");
-		
+
 		if(in_array($priority, $options)){
 			self::$priority=$priority;
 		}else{
 			self::$error[] = "Priority not valid.";
 		}
 	}
-	
-	public static function set_action($action)
+
+	/**
+	 * Sets a url action to be called from prowl.
+	 */
+	public static function action($action)
 	{
 		if($action){
 			// Check valid URL and set it.
@@ -78,17 +110,23 @@ class Prowl {
 			}
 		}
 	}
-	
-	public static function set_subject($subject)
+
+	/**
+	 * Sets the subject.
+	 */
+	public static function subject($subject)
 	{
 		self::$subject=$subject;
 	}
-	
-	public static function set_message($message)
+
+	/**
+	 * Sets the message.
+	 */
+	public static function message($message)
 	{
 		// Cleanup html if any
 		$message = trim(strip_tags(preg_replace("/<br\/?>/", "\n", utf8_encode($message))));
-		
+
 		// Check str length
 		if(strlen($message)<=10000){
 			self::$message=$message;
@@ -98,7 +136,10 @@ class Prowl {
 		}
 	}
 
-	public function add_key($key)
+	/**
+	 * Sets or ads in keys to message to.
+	 */
+	public static function key($key)
 	{
 		if(is_array($key)){
 			$keys = FALSE;
@@ -120,29 +161,48 @@ class Prowl {
 		}
 	}
 
-	public static function send()
+	/**
+	 * Alias for push
+	 */
+	public static function send($message = false, $config = false)
 	{
 		self::push();
 	}
 
-	public static function post()
+	/**
+	 * Alias for push
+	 */
+	public static function post($message = false, $config = false)
 	{
 		self::push();
 	}
-	
-	public static function push()
+
+	/**
+	 * Pushes the message to your iphone etc
+	 */
+	public static function push($data = false)
 	{
+		// Arrays are treated as configs otherwise the message to send
+		if($data){
+			if(is_array($data)){
+				self::configuration($data);
+			}
+			else{
+				self::message($data);
+			}
+		}
+
 		// Check required fields
-		if(!self::$key){			self::$error[] = "Api key not set in config.";}
-		if(!self::$application){	self::$error[] = "Application name not set.";}
-		if(!self::$subject){		self::$error[] = "Subject not set.";}
-		if(!self::$message){		self::$error[] = "Description not set.";}
+		if( ! self::$key){			self::$error[] = "api key not set";}
+		if( ! self::$application){	self::$error[] = "application not set";}
+		if( ! self::$subject){		self::$error[] = "subject not set";}
+		if( ! self::$message){		self::$error[] = "description not set";}
 
 		if(is_array(self::$error) && count(self::$error)>0){
-			$error = implode("<br/>", self::$error);
-			die($error);
+			$error = implode(", ", self::$error);
+			throw new ConfigError($error);
 		}
-		
+
 		// All good - continue
 		$fields = array(
 			'apikey'=>self::$key,
@@ -152,14 +212,14 @@ class Prowl {
 			'event'=>urlencode(self::$subject),
 			'description'=>urlencode(self::$message)
 		);
-		
+
 		// Url-ify the data for the POST
 		$fields_string = FALSE;
 		foreach($fields as $key=>$value){
 			$fields_string .= $key.'='.$value.'&';
 		}
 		rtrim($fields_string,'&');
-		
+
 		// Curl
 		$ch = curl_init();
 
@@ -170,10 +230,10 @@ class Prowl {
 			curl_setopt($ch, CURLOPT_HEADER, 0);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-			
+
 			$return = curl_exec($ch);
 			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			
+
 		curl_close($ch);
 
 		switch($httpcode)
@@ -181,23 +241,23 @@ class Prowl {
 			case 400 :
 				throw new DidNotValidate('Bad request, the parameters you provided did not validate.');
 			break;
-			
+
 			case 401 :
 				throw new DidNotAuthorize('Not authorized, the API key given is not valid, and does not correspond to a user.');
 			break;
-			
+
 			case 406 :
 				throw new OverLimit('Not acceptable, your IP address has exceeded the API limit.');
 			break;
-			
+
 			case 409 :
 				throw new NotApproved('Not approved, the user has yet to approve your retrieve request.');
 			break;
-			
+
 			case 500 :
 				throw new InternalError('Internal server error, something failed to execute properly on the Prowl side.');
 			break;
-			
+
 			case 200 :
 			default:
 				return true;
@@ -205,5 +265,3 @@ class Prowl {
 		}
 	}
 }
-
-/* end of file prowl.php */

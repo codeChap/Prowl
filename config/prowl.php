@@ -1,24 +1,9 @@
 <?php
-/**
- * Fuel is a fast, lightweight, community driven PHP5 framework.
- *
- * @package    Fuel
- * @version    1.0
- * @author     Fuel Development Team
- * @license    MIT License
- * @copyright  2010 - 2011 Fuel Development Team
- * @link       http://fuelphp.com
- */
-
-/**
- * NOTICE:
- *
- * If you need to make modifications to the default configuration, copy
- * this file to your app/config folder, and make them in there.
- *
- * This will allow you to upgrade fuel without losing your custom config.
- */
 
 return array(
-
-);
+		'key' => '2658ef9889d7bad3f79006a89b239e13b3700192',
+		'url' => 'https://api.prowlapp.com/publicapi/add',
+		'application' => 'application',
+		'subject' => 'subject',
+		'description' => 'description'
+	);
