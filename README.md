@@ -5,7 +5,9 @@ Prowl-PSR
 
 Simple Independent PHP Prowl package
 
-Version: 1.0
+Version: 1.0.0
+
+Prowl is the Growl client for iOS. Push to your iPhone, iPod touch, or iPad notifications from a Mac or Windows computer, or from a multitude of apps and services. Easily integrate the Prowl API into your applications. Visit Prowl app for more information.
 
 Requirements
 ------------
@@ -43,7 +45,7 @@ More info can be found at http://getcomposer.org
 Usage
 ------------
 
-### index.php for example:
+### Example A:
 
 ```php
 
@@ -55,7 +57,7 @@ Usage
 		'application' => 'testApp',
 		'key' => '1234567890123456789012345678901234567890', // Enter your key from prowlApp here.
 		'failOnNotAuthorized' => false,
-		'subject' => 'testing',
+		'subject' => 'testing a',
 		'message' => 'testing one two three',
 		'action' => 'http://example.com',
 		'priority' => 2
@@ -66,34 +68,53 @@ Usage
 
 ```
 
+### Example B:
+
+```php
+
+	require "vendor/autoload.php";
+
+	use Zebra\Prowl\Prowl;
+
+	$p = new Prowl();
+	$p->setApplication('testApp');
+	$p->setKey('1234567890123456789012345678901234567890');
+	$p->setFailOnNotAuthorized(false);
+	$p->setSubject('testing b');
+	$p->setMessage('test b');
+	$p->push();
+
+```
+
+
 Functions
 ---------
-###setAction()
+####$setAction()
 Sets an action url that can be called from prowl on your phone.
 
-###setApplication()
+####setApplication()
 Sets the application name.
 
-###setDebug()
+####setDebug()
 Turns curl verbose mode on.
 
-###setFailOnNotAuthorized()
+####setFailOnNotAuthorized()
 If the api key used is not authorised throw an error.
 
-###setKey()
+####setKey()
 Sets the api key to use, can also take an array or keys eg: array(key1, key2, key3).
 
-###setMessage()
+####setMessage()
 Sets the message.
 
-###setPriority()
+####setPriority()
 Set the message priority.
 
-###setUrl()
+####setUrl()
 Sets the url, should never this this.
 
-###setSubject()
+####setSubject()
 Sets the message subject.
 
-###push()
-Pushes the message to your device.
+####push()
+Pushes the message to your device, you can enter the messag here as well: $p->push('a message');
