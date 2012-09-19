@@ -23,7 +23,7 @@ To install Prowl-PRS with composer you create a composer.json in your project ro
 ```php
 {
     "require": {
-        "xenji/ProwlPHP": ">=1.0.2"
+        "Zebra/ProwlPHP": ">=1.0.2"
     }
 }
 ```
