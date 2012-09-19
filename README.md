@@ -22,39 +22,78 @@ To install Prowl-PRS with composer you create a composer.json in your project ro
 ```php
 {
     "require": {
-        "Zebra/Prowl":">=1.0"
+        "Zebra/Prowl-PSR":">=1.0.*"
     }
 }
 ```
 
 then run
 
-```php
+```
 $ wget -nc http://getcomposer.org/composer.phar
 $ php composer.phar install
 ```
 
-You should now have ProwlPHP installed in vendor/Zebra/Prowl
+You should now have Prowl installed in vendor/Zebra/Prowl
 
-Include the autoload file in your project. (vendor/composer/autoload.php)
+Include the autoload file in your project. (vendor/autoload.php)
 
+More info can be found at http://getcomposer.org
 
 Usage
 ------------
 
+### index.php for example:
+
 ```php
 
-$conf = array(
-	'application' => 'application',
-	'key' => '1234567890123456789012345678901234567890',
-	'failOnNotAuthorized' => false,
-	'subject' => 'subject',
-	'message' => 'test a',
-	'action' => 'http://example.com',
-	'priority' => 2,
-	'url' => "https://api.prowlapp.com/publicapi/add"
-);
-$p = new Prowl($conf);
-$p->push();
+	require "vendor/autoload.php";
+
+	use Zebra\Prowl\Prowl;
+
+	$conf = array(
+		'application' => 'testApp',
+		'key' => '1234567890123456789012345678901234567890', // Enter your key from prowlApp here.
+		'failOnNotAuthorized' => false,
+		'subject' => 'testing',
+		'message' => 'testing one two three',
+		'action' => 'http://example.com',
+		'priority' => 2
+	);
+
+	$p = new Prowl($conf);
+	$p->push();
 
 ```
+
+Functions
+---------
+###setAction()
+Sets an action url that can be called from prowl on your phone.
+
+###setApplication()
+Sets the application name.
+
+###setDebug()
+Turns curl verbose mode on.
+
+###setFailOnNotAuthorized()
+If the api key used is not authorised throw an error.
+
+###setKey()
+Sets the api key to use, can also take an array or keys eg: array(key1, key2, key3).
+
+###setMessage()
+Sets the message.
+
+###setPriority()
+Set the message priority.
+
+###setUrl()
+Sets the url, should never this this.
+
+###setSubject()
+Sets the message subject.
+
+###push()
+Pushes the message to your device.

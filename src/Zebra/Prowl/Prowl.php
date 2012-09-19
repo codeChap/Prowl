@@ -217,22 +217,6 @@ class Prowl {
 	}
 
 	/**
-	 * Alias for push
-	 */
-	public function send($message = false)
-	{
-		self::push();
-	}
-
-	/**
-	 * Alias for push
-	 */
-	public function post($message = false)
-	{
-		self::push();
-	}
-
-	/**
 	 * Pushes the message to your iphone etc
 	 */
 	public function push($message = false)
