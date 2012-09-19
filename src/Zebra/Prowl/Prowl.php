@@ -18,7 +18,7 @@ class InternalError extends \Exception {}
 class ConfigError extends \Exception {}
 
 
-class tt {
+class Prowl {
 
 	private $action = false;
 	private $application = false;

@@ -36,7 +36,7 @@
 
 		function test_c()
 		{
-			$p = new Zebra\Prowl();
+			$p = new Prowl();
 			$p->setApplication('application');
 			$p->setKey('1234567890123456789012345678901234567890');
 			$p->setFailOnNotAuthorized(false);
