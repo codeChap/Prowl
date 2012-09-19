@@ -1,6 +1,6 @@
 <?php
 
-	use Zebra\Prowl\Prowl;
+	//use Zebra\Prowl\Prowl;
 
 	class ProwlTest extends PHPUnit_Framework_TestCase {
 
