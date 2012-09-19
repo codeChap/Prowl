@@ -7,7 +7,16 @@ Independent PHP Prowl package
 
 Version: 1.0
 
-### Usage :
+Installation
+------------
+
+@todo
+
+
+Usage
+------------
+
+```php
 
 $conf = array(
 	'application' => 'application',
@@ -19,6 +28,7 @@ $conf = array(
 	'priority' => 2,
 	'url' => "https://api.prowlapp.com/publicapi/add"
 );
-
 $p = new Prowl($conf);
 $p->push();
+
+```
