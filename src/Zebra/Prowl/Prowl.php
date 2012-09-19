@@ -10,14 +10,6 @@
 
 namespace Zebra\Prowl;
 
-class DidNotValidate extends \Exception {}
-class DidNotAuthorize extends \Exception {}
-class OverLimit extends \Exception {}
-class NotApproved extends \Exception {}
-class InternalError extends \Exception {}
-class ConfigError extends \Exception {}
-
-
 class Prowl {
 
 	private $action = false;
@@ -45,7 +37,7 @@ class Prowl {
 			if(array_key_exists($key, $config)){
 				if( ! call_user_func(array($this, 'set'.ucFirst(strtolower($key))), $config[$key]))
 				{
-					throw new ConfigError("Could not set $key to " . $config[$key] . ": " . implode($this->error) );
+					throw new Exception("Could not set $key to " . $config[$key] . ": " . implode($this->error) );
 				}
 			}
 		}
@@ -302,7 +294,7 @@ class Prowl {
 		{
 			case 401 :
 				if($this->failOnNotAuthorized == true){
-					throw new DidNotAuthorize('Not authorized, the API key given is not valid, and does not correspond to a user.');
+					throw new Exception('Not authorized, the API key given is not valid, and does not correspond to a user.');
 				}
 				else{
 					return true;
@@ -310,19 +302,19 @@ class Prowl {
 			break;
 
 			case 400 :
-				throw new DidNotValidate('Bad request, the parameters you provided did not validate.');
+				throw new Exception('Bad request, the parameters you provided did not validate.');
 			break;
 
 			case 406 :
-				throw new OverLimit('Not acceptable, your IP address has exceeded the API limit.');
+				throw new Exception('Not acceptable, your IP address has exceeded the API limit.');
 			break;
 
 			case 409 :
-				throw new NotApproved('Not approved, the user has yet to approve your retrieve request.');
+				throw new Exception('Not approved, the user has yet to approve your retrieve request.');
 			break;
 
 			case 500 :
-				throw new InternalError('Internal server error, something failed to execute properly on the Prowl side.');
+				throw new Exception('Internal server error, something failed to execute properly on the Prowl side.');
 			break;
 
 			case 200 :
