@@ -17,7 +17,8 @@ class NotApproved extends \Exception {}
 class InternalError extends \Exception {}
 class ConfigError extends \Exception {}
 
-class Prowl {
+
+class tt {
 
 	private $action = false;
 	private $application = false;
