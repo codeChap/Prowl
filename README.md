@@ -3,15 +3,14 @@ Prowl-PSR
 
 [![Build Status](https://secure.travis-ci.org/egersdorfer/Prowl-PSR.png)](http://travis-ci.org/egersdorfer/Prowl-PSR)
 
-Independent PHP Prowl package
+Simple Independent PHP Prowl package
 
 Version: 1.0
 
 Requirements
 ------------
 
-php >= 5.3.0
-curl
+php >= 5.3.0 and curl
 
 Installation
 ------------
@@ -23,7 +22,7 @@ To install Prowl-PRS with composer you create a composer.json in your project ro
 ```php
 {
     "require": {
-        "Zebra/ProwlPHP": ">=1.0.2"
+        "Zebra/Prowl":">=1.0"
     }
 }
 ```
