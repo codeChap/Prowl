@@ -7,10 +7,37 @@ Independent PHP Prowl package
 
 Version: 1.0
 
+Requirements
+------------
+
+php >= 5.3.0
+curl
+
 Installation
 ------------
 
-@todo
+### Via Composer
+
+To install Prowl-PRS with composer you create a composer.json in your project root and add:
+
+```php
+{
+    "require": {
+        "xenji/ProwlPHP": ">=1.0.2"
+    }
+}
+```
+
+then run
+
+```php
+$ wget -nc http://getcomposer.org/composer.phar
+$ php composer.phar install
+```
+
+You should now have ProwlPHP installed in vendor/Zebra/Prowl
+
+Include the autoload file in your project. (vendor/composer/autoload.php)
 
 
 Usage
