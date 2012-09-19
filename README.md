@@ -24,7 +24,7 @@ To install Prowl-PRS with composer you create a composer.json in your project ro
 ```php
 {
     "require": {
-        "Zebra/Prowl-PSR":">=1.0.*"
+        "Zebra/Prowl":"dev-master"
     }
 }
 ```
@@ -117,4 +117,4 @@ Sets the url, should never this this.
 Sets the message subject.
 
 ####push()
-Pushes the message to your device, you can enter the messag here as well: $p->push('a message');
+Pushes the message to your device, you can enter the message here as well: $p->push('a message');
