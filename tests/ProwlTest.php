@@ -37,9 +37,9 @@
 			$p = new Prowl();
 			$p->setApplication('application');
 			$p->setKey('1234567890123456789012345678901234567890');
-			$p->setFailOnNotAuthorized(false),
-			$p->setSubject('subject'),
-			$p->setMessage('test c')
+			$p->setFailOnNotAuthorized(false);
+			$p->setSubject('subject');
+			$p->setMessage('test c');
 			$p->push();
 		}
 
@@ -48,9 +48,9 @@
 			$p = new Prowl();
 			$p->setApplication('application');
 			$p->setKey('1234567890123456789012345678901234567890');
-			$p->setFailOnNotAuthorized(false),
-			$p->setSubject('subject'),
-			$p->setMessage('test c')
+			$p->setFailOnNotAuthorized(false);
+			$p->setSubject('subject');
+			$p->setMessage('test c');
 			$p->push();
 		}
 	}
