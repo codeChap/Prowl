@@ -251,10 +251,16 @@ class Prowl {
 
 		// Clean and convert params
 		foreach($fields as $k => $v){
-			switch($k){
-				default : $fields[$k] = $this->toUtf8($this->clean($v)); break;
-				case 'apikey' :
-				case 'url' :
+
+			if($v){
+				switch($k){
+					default : $fields[$k] = $this->toUtf8($this->clean($v)); break;
+					case 'apikey' :
+					case 'url' :
+				}
+			}
+			else{
+				unset($fields[$k]);
 			}
 		}
 

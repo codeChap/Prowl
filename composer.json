@@ -3,7 +3,7 @@
     "type": "library",
     "description": "PHP Prowl package",
     "keywords": ["prowl"],
-    "homepage": "https://github.com/egersdorfer/Prowl-PSR",
+    "homepage": "https://github.com/ZebraFW/Prowl",
     "license": "MIT",
     "authors": [
         {
