@@ -35,9 +35,8 @@ class Prowl {
 		// Loop and set config values
 		foreach( $params as $key ){
 			if(array_key_exists($key, $config)){
-				if( ! call_user_func(array($this, 'set'.ucFirst(strtolower($key))), $config[$key]))
-				{
-					throw new Exception("Could not set $key to " . $config[$key] . ": " . implode($this->error) );
+				if( ! call_user_func(array($this, 'set'.ucFirst(strtolower($key))), $config[$key])){
+					throw new \Exception("Could not set $key to " . $config[$key] . ": " . implode($this->error) );
 				}
 			}
 		}
@@ -72,7 +71,7 @@ class Prowl {
 	public function setApplication($application=false)
 	{
 		if($application){
-			$this->application=utf8_encode($application);
+			$this->application = $this->clean($application);
 		}
 		else{
 			return false;
@@ -125,7 +124,7 @@ class Prowl {
 			$this->key = rtrim($keys,",");
 		}else{
 
-		// Sets a single key
+			// Sets a single key
 			if(strlen($key) == 40){
 				$this->key = $key;
 			}
@@ -144,8 +143,8 @@ class Prowl {
 	 */
 	public function setMessage($message)
 	{
-		// Cleanup html if any
-		$message = trim(strip_tags(preg_replace("/<br\/?>/", "\n", utf8_encode($message))));
+		// Clean up html
+		$message = $this->clean($message);
 
 		// Check str length
 		if(strlen($message)<=10000){
@@ -205,7 +204,7 @@ class Prowl {
 	public function setSubject($subject=false)
 	{
 		if($subject){
-			$this->subject=$subject;
+			$this->subject = $this->clean($subject);
 		}
 		else{
 			$this->error[] = "empty subject";
@@ -224,61 +223,64 @@ class Prowl {
 		// Arrays are treated as configs otherwise the message to send
 		if($message){
 			if( ! $this->setMessage($message)){
-				throw new ConfigError(implode($this->error));
+				throw new \Exception(implode($this->error));
 			}
 		}
 
 		// Check required fields
-		if( ! $this->application )	{ $this->error[] = "application not set"; }
-		if( ! $this->key )			{ $this->error[] = "key not set"; }
-		if( ! $this->message )		{ $this->error[] = "message not set"; }
-		if( ! $this->url )			{ $this->error[] = "url not set"; };
-		if( ! $this->subject ) 		{ $this->error[] = "subject not set"; };
+		( ! $this->application ) ? 	$this->error[] = "application not set" : null;
+		( ! $this->key ) ? 			$this->error[] = "key not set" : null;
+		( ! $this->message ) ? 		$this->error[] = "message not set" : null;
+		( ! $this->url ) ? 			$this->error[] = "url not set" : null;
+		( ! $this->subject ) ?		$this->error[] = "subject not set" : null;
 
-		if(is_array($this->error) && count($this->error)>0){
+		if(is_array($this->error) && count($this->error)){
 			$error = implode(", ".PHP_EOL, $this->error) . PHP_EOL;
-			throw new ConfigError($error);
+			throw new \Exception($error);
 		}
 
 		// All good - continue
 		$fields = array(
-			'apikey'=>$this->key,
+			'apikey'=> $this->key,
 			'url'=> $this->action,
-			'priority'=>$this->priority,
-			'application'=>urlencode($this->application),
-			'event'=>urlencode($this->subject),
-			'description'=>urlencode($this->message)
+			'priority'=> $this->priority,
+			'application'=> $this->application,
+			'event'=> $this->subject,
+			'description'=> $this->message
 		);
 
-		// Url-ify the data for the POST
-		$fields_string = FALSE;
-		foreach($fields as $key=>$value){
-			$fields_string .= $key.'='.$value.'&';
+		// Clean and convert params
+		foreach($fields as $k => $v){
+			switch($k){
+				default : $fields[$k] = $this->toUtf8($this->clean($v)); break;
+				case 'apikey' :
+				case 'url' :
+			}
 		}
-		rtrim($fields_string,'&');
+
+		// Build request string
+		$fields_string = http_build_query($fields);
 
 		// Curl
 		$ch = curl_init();
-
-			curl_setopt($ch, CURLOPT_URL,$this->url);
-			curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_POST, count($fields));
-			curl_setopt($ch, CURLOPT_POSTFIELDS,$fields_string);
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-
-			$return = curl_exec($ch);
-			$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
+		curl_setopt($ch, CURLOPT_URL,$this->url);
+		curl_setopt($ch, CURLOPT_VERBOSE, $this->debug);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POST, count($fields));
+		curl_setopt($ch, CURLOPT_POSTFIELDS,$fields_string);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		$return = curl_exec($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 
+		// Error codes
 		switch($httpcode)
 		{
 			case 401 :
 				if($this->failOnNotAuthorized == true){
-					throw new Exception('Not authorized, the API key given is not valid, and does not correspond to a user.');
+					throw new \Exception('Not authorized, the API key given is not valid, and does not correspond to a user.');
 				}
 				else{
 					return true;
@@ -286,19 +288,19 @@ class Prowl {
 			break;
 
 			case 400 :
-				throw new Exception('Bad request, the parameters you provided did not validate.');
+				throw new \Exception('Bad request, the parameters you provided did not validate.');
 			break;
 
 			case 406 :
-				throw new Exception('Not acceptable, your IP address has exceeded the API limit.');
+				throw new \Exception('Not acceptable, your IP address has exceeded the API limit.');
 			break;
 
 			case 409 :
-				throw new Exception('Not approved, the user has yet to approve your retrieve request.');
+				throw new \Exception('Not approved, the user has yet to approve your retrieve request.');
 			break;
 
 			case 500 :
-				throw new Exception('Internal server error, something failed to execute properly on the Prowl side.');
+				throw new \Exception('Internal server error, something failed to execute properly on the Prowl side.');
 			break;
 
 			case 200 :
@@ -306,8 +308,41 @@ class Prowl {
 			break;
 
 			default:
-				throw new Exception('An unknown error occured. ' . $return);
+				throw new \Exception('An unknown error occured. ' . $return);
 			break;
 		}
+	}
+
+	// Strips html and converts breaks to new lines
+	private function clean($string)
+	{
+		// Trim, strip and convert breaks
+		$string = trim(strip_tags(preg_replace("/<br\/?>/", "\n", $string)));
+
+		// Convert entities
+		$string = html_entity_decode($string);
+
+		// Done
+		return $string;
+	}
+
+	// Attempts to convert a string to utf8
+	private function toUtf8($string)
+	{
+		if( ! mb_check_encoding($string, 'UTF-8') ){
+
+			// Convert it
+			$string = mb_convert_encoding($string, 'UTF-8', 'UTF-8');
+
+			// Check it
+			if( ! mb_check_encoding($string, 'UTF-8') ){
+
+				// Could not convert
+				trigger_error("Could not convert to utf8", E_USER_NOTICE);
+			}
+		}
+
+		// Done
+ 		return $string;
 	}
 }
