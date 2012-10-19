@@ -87,7 +87,9 @@ Usage
 ```
 
 You can also set the message to the following type of symbols.
-Hello<br/>"Derrick" &lt; @ åäöâ ©
+```php
+$p->setMessage('Hello<br/>"Derrick" &lt; @ åäöâ ©');
+```
 
 
 Functions
