@@ -1,7 +1,5 @@
 <?php
 
-	use Zebra\Prowl\Prowl;
-
 	class ProwlTest extends PHPUnit_Framework_TestCase {
 
 		function test_a()
@@ -17,7 +15,7 @@
 				'url' => "https://api.prowlapp.com/publicapi/add"
 			);
 
-			$p = new Prowl($conf);
+			$p = new Zebra\Prowl($conf);
 			$p->push();
 		}
 
@@ -30,13 +28,13 @@
 				'subject' => 'subject'
 			);
 
-			$p = new Prowl($conf);
+			$p = new Zebra\Prowl($conf);
 			$p->push('test b');
 		}
 
 		function test_c()
 		{
-			$p = new Prowl();
+			$p = new zebra\Prowl();
 			$p->setApplication('application');
 			$p->setKey('1234567890123456789012345678901234567890');
 			$p->setFailOnNotAuthorized(false);
@@ -47,7 +45,7 @@
 
 		function test_d()
 		{
-			$p = new Prowl();
+			$p = new Zebra\Prowl();
 			$p->setApplication('application');
 			$p->setKey('1234567890123456789012345678901234567890');
 			$p->setFailOnNotAuthorized(false);

@@ -8,7 +8,7 @@
  * @copyright  2011 - 2012 Derrick Egersdorfer
  */
 
-namespace Zebra\Prowl;
+namespace Zebra;
 
 class Prowl {
 
@@ -257,6 +257,7 @@ class Prowl {
 					default : $fields[$k] = $this->toUtf8($this->clean($v)); break;
 					case 'apikey' :
 					case 'url' :
+					case 'priority' :
 				}
 			}
 			else{
