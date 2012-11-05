@@ -51,8 +51,6 @@ Usage
 
 	require "vendor/autoload.php";
 
-	use Zebra\Prowl\Prowl;
-
 	$conf = array(
 		'application' => 'testApp',
 		'key' => '1234567890123456789012345678901234567890', // Enter your key from prowlApp here.
@@ -63,7 +61,7 @@ Usage
 		'priority' => 2
 	);
 
-	$p = new Prowl($conf);
+	$p = new Zebra\Prowl($conf);
 	$p->push();
 
 ```
@@ -74,9 +72,7 @@ Usage
 
 	require "vendor/autoload.php";
 
-	use Zebra\Prowl\Prowl;
-
-	$p = new Prowl();
+	$p = new Zebra\Prowl();
 	$p->setApplication('testApp');
 	$p->setKey('1234567890123456789012345678901234567890');
 	$p->setFailOnNotAuthorized(false);
@@ -123,3 +119,6 @@ Sets the message subject.
 
 ####push()
 Pushes the message to your device, you can enter the message here as well: $p->push('a message');
+
+
+Please fork and push updates, files should follow PSR standards.
