@@ -24,7 +24,7 @@ To install Prowl-PRS with composer you create a composer.json in your project ro
 ```php
 {
     "require": {
-        "egersdorfer/prowl":"dev-psr/develop"
+        "egersdorfer/prowl": "dev-psr/develop"
     }
 }
 ```
@@ -61,7 +61,7 @@ Usage
 		'priority' => 2
 	);
 
-	$p = new Egersdorfer\Prowl($conf);
+	$p = new \Prowl\Prowl($conf);
 	$p->push();
 
 ```
@@ -72,7 +72,7 @@ Usage
 
 	require "vendor/autoload.php";
 
-	$p = new Egersdorfer\Prowl();
+	$p = new Prowl\Prowl();
 	$p->setApplication('testApp');
 	$p->setKey('1234567890123456789012345678901234567890');
 	$p->setFailOnNotAuthorized(false);
