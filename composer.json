@@ -1,9 +1,9 @@
 {
-    "name": "zebra/prowl",
+    "name": "egersdorfer/prowl",
     "type": "library",
     "description": "PHP Prowl package",
     "keywords": ["prowl"],
-    "homepage": "https://github.com/ZebraFW/Prowl",
+    "homepage": "https://github.com/egersdorfer/Prowl",
     "license": "MIT",
     "authors": [
         {
