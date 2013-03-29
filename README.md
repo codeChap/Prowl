@@ -24,7 +24,7 @@ To install Prowl-PRS with composer you create a composer.json in your project ro
 ```php
 {
     "require": {
-        "egersdorfer/prowl": "dev-psr/develop"
+        "codeChap/prowl": "dev-psr/develop"
     }
 }
 ```
@@ -81,12 +81,6 @@ Usage
 	$p->push();
 
 ```
-
-You can also set the message to the following type of symbols.
-```php
-$p->setMessage('Hello<br/>"Derrick" &lt; @ åäöâ ©');
-```
-
 
 Functions
 ---------
