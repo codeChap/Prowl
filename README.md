@@ -24,7 +24,7 @@ To install Prowl-PRS with composer you create a composer.json in your project ro
 ```php
 {
     "require": {
-        "codeChap/prowl": "dev-psr/develop"
+        "egersdorfer/prowl": "dev-psr/develop"
     }
 }
 ```
